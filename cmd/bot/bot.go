@@ -36,10 +36,12 @@ func (b *Bot) Start() {
 }
 
 func (b *Bot) registerEventHandlers() {
+	b.session.Identify.Intents = discordgo.IntentMessageContent
 	for name, handler := range eventhandler.EventHandlers() {
 		fmt.Printf("registering event handler: %s\n", name)
 		_ = b.session.AddHandler(handler)
 	}
+	b.session.Identify.Intents = discordgo.IntentsGuildMessages
 }
 
 func (b *Bot) Close() {
