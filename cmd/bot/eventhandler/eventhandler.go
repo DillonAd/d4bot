@@ -1,7 +1,7 @@
 package eventhandler
 
-func EventHandlers() []interface{} {
-	return []interface{}{
-		shoresy,
+func EventHandlers() map[string]interface{} {
+	return map[string]interface{}{
+		"shoresy": shoresy,
 	}
 }

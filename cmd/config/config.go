@@ -2,15 +2,14 @@ package config
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/spf13/viper"
 )
 
 type Config struct {
-	Tracing     *Tracing     `mapstructure:",squash"`
-	Healthcheck *Healthcheck `mapstructure:",squash"`
-	Bot         *Bot         `mapstructure:",squash"`
+	Tracing     Tracing     `mapstructure:",squash"`
+	Healthcheck Healthcheck `mapstructure:",squash"`
+	Bot         Bot         `mapstructure:",squash"`
 }
 
 type Tracing struct {
@@ -22,7 +21,7 @@ type Healthcheck struct {
 }
 
 type Bot struct {
-	Token string `mapstructrue:"BOT_TOKEN"`
+	Token string `mapstructure:"BOT_TOKEN"`
 }
 
 func Read() (*Config, error) {
@@ -30,13 +29,13 @@ func Read() (*Config, error) {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		log.Printf("error reading config file: %v", err)
+		return nil, fmt.Errorf("error reading config file: %v", err)
 	}
 
-	cfg := &Config{}
-	if err := viper.Unmarshal(cfg); err != nil {
+	config := &Config{}
+	if err := viper.Unmarshal(config); err != nil {
 		return nil, fmt.Errorf("error unmarshaling config: %v", err)
 	}
-
-	return cfg, nil
+	fmt.Printf("returning config:: %+v", config)
+	return config, nil
 }

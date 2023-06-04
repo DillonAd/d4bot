@@ -36,7 +36,8 @@ func (b *Bot) Start() {
 }
 
 func (b *Bot) registerEventHandlers() {
-	for _, handler := range eventhandler.EventHandlers() {
+	for name, handler := range eventhandler.EventHandlers() {
+		fmt.Printf("registering event handler: %s\n", name)
 		_ = b.session.AddHandler(handler)
 	}
 }
