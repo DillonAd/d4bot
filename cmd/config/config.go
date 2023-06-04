@@ -36,6 +36,5 @@ func Read() (*Config, error) {
 	if err := viper.Unmarshal(config); err != nil {
 		return nil, fmt.Errorf("error unmarshaling config: %v", err)
 	}
-	fmt.Printf("returning config:: %+v", config)
 	return config, nil
 }
