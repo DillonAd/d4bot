@@ -30,7 +30,7 @@ func main() {
 	ready := make(chan bool)
 	healthDone := health.Init(ctx, config, ready)
 
-	bot, err := bot.New(ctx, config)
+	bot, err := bot.New(ctx, config.Bot)
 	if err != nil {
 		panic(err)
 	}

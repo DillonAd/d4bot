@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Tracing     Tracing     `mapstructure:",squash"`
-	Healthcheck Healthcheck `mapstructure:",squash"`
+	Tracing     *Tracing     `mapstructure:",squash"`
+	Healthcheck *Healthcheck `mapstructure:",squash"`
+	Bot         *Bot         `mapstructure:",squash"`
 }
 
 type Tracing struct {
@@ -18,6 +19,10 @@ type Tracing struct {
 
 type Healthcheck struct {
 	ApiPath string `mapstructure:"HEALTH_PATH"`
+}
+
+type Bot struct {
+	Token string `mapstructrue:"BOT_TOKEN"`
 }
 
 func Read() (*Config, error) {
