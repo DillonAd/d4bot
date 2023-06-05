@@ -7,6 +7,10 @@ build:
 	docker tag ${NAME} dillonad/${NAME}:${VERSION}
 	docker tag ${NAME} dillonad/${NAME}:latest
 
+.PHONY: run
+run: build
+	docker run -it --rm -e BOT_TOKEN=${DISCORD_BOT_TOKEN} dillonad/${NAME}:latest
+
 .PHONY: publish
 publish: build
 	docker push dillonad/${NAME}:${VERSION}

@@ -1,2 +1,3 @@
 OTEL_ENDPOINT: ""
 HEALTH_PATH: "/health"
+BOT_TOKEN: ""
