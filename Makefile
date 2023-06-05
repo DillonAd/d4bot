@@ -1,6 +1,10 @@
 NAME = d4bot
 VERSION := $(shell cat version)
 
+.PHONY: up
+up:
+	docker-compose up -d
+
 .PHONY: build
 build:
 	docker build -t ${NAME} .
