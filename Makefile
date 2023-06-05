@@ -9,7 +9,7 @@ build:
 
 .PHONY: run
 run: build
-	docker run -it --rm dillonad/${NAME}:latest
+	docker run -it --rm -e BOT_TOKEN=${DISCORD_BOT_TOKEN} dillonad/${NAME}:latest
 
 .PHONY: publish
 publish: build
