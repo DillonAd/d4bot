@@ -11,4 +11,4 @@ Tools needed:
 
 ## Running the bot locally
 
-Set the `DISCORD_BOT_TOKEN` environment variable to the generated bot token and then run `make run`.
+Create a `.env.secret` file in the root of the project and put `BOT_TOKEN={bot_token_secret}` into the file. Next, run `make up`.

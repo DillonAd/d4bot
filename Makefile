@@ -10,7 +10,6 @@ endif
 
 VERSION := $(shell cat version)
 
-
 .PHONY: build
 build:
 	@docker-compose build
