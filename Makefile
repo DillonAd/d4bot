@@ -1,15 +1,24 @@
-NAME = d4bot
+# If you just run 'make' we default to the 'up' task.
+.DEFAULT_GOAL := run
+
+
+# For our Windows freinds.
+ifeq ($(OS),Windows_NT)
+	SHELL := powershell.exe
+	.SHELLFLAGS := -NoProfile -Command
+endif
+
 VERSION := $(shell cat version)
+
 
 .PHONY: build
 build:
-	docker build -t ${NAME} .
-	docker tag ${NAME} dillonad/${NAME}:${VERSION}
-	docker tag ${NAME} dillonad/${NAME}:latest
+	@docker-compose build
+	@docker tag d4bot dillonad/d4bot:${VERSION}
 
 .PHONY: run
-run: build
-	docker run -it --rm -e BOT_TOKEN=${DISCORD_BOT_TOKEN} dillonad/${NAME}:latest
+run:
+	docker-compose up -d --build
 
 .PHONY: publish
 publish: build
@@ -22,4 +31,4 @@ lint:
 
 .PHONY: test
 test:
-	go test -bench=. -cover ./...
+	@docker run --rm -v $(pwd):/app -w /app golang:1.20 go test -bench=. -cover ./...

@@ -16,14 +16,23 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func InitTracing(ctx context.Context, collectorEndpoint string) func() {
-	if collectorEndpoint == "" {
+func InitTracing(ctx context.Context, collector_endpoint string, collector_insecure bool) func() {
+	var security otlptracegrpc.Option
+
+	if collector_endpoint == "" {
 		log.Println("no opentelemetry collector endpoint")
 		return func() {}
 	}
 
+	if collector_insecure == true {
+		security = otlptracegrpc.WithInsecure()
+	} else {
+		security = nil
+	}
+
 	client := otlptracegrpc.NewClient([]otlptracegrpc.Option{
-		otlptracegrpc.WithEndpoint(collectorEndpoint),
+		otlptracegrpc.WithEndpoint(collector_endpoint),
+		security,
 	}...)
 	exporter, err := otlptrace.New(ctx, client)
 	if err != nil {

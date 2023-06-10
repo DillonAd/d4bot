@@ -8,7 +8,6 @@ import (
 	"syscall"
 
 	"github.com/DillonAd/d4bot/cmd/bot"
-	"github.com/DillonAd/d4bot/cmd/config"
 	"github.com/DillonAd/d4bot/cmd/health"
 	"github.com/DillonAd/d4bot/cmd/otel"
 )
@@ -19,18 +18,20 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	config, err := config.Read()
-	if err != nil {
-		panic(err)
-	}
+	config_otel_endpoint := os.Getenv("OTEL_ENDPOINT")
+	config_otel_insecure := os.Getenv("OTEL_EXPORTER_INSECURE") == "true"
+	config_bot_token := os.Getenv("BOT_TOKEN")
 
-	shutdownTracing := otel.InitTracing(ctx, config.Tracing.OtelEndpoint)
+	shutdownTracing := otel.InitTracing(ctx, config_otel_endpoint, config_otel_insecure)
 	defer shutdownTracing()
 
-	ready := make(chan bool)
-	healthDone := health.Init(ctx, config, ready)
+	ctx, testspan := otel.StartSpan(ctx, "hello-span")
+	defer testspan.End()
 
-	bot, err := bot.New(ctx, &config.Bot)
+	ready := make(chan bool)
+	healthDone := health.Init(ctx, ready)
+
+	bot, err := bot.New(ctx, config_bot_token)
 	if err != nil {
 		panic(err)
 	}

@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-
-	"github.com/DillonAd/d4bot/cmd/config"
 )
 
 type Health struct {
@@ -15,7 +13,7 @@ type Health struct {
 
 var isHealthy bool = false
 
-func Init(ctx context.Context, config *config.Config, ready <-chan bool) <-chan interface{} {
+func Init(ctx context.Context, ready <-chan bool) <-chan interface{} {
 	done := make(chan interface{}, 1)
 	go func(threadCtx context.Context, done chan<- interface{}) {
 	loop:
@@ -32,7 +30,7 @@ func Init(ctx context.Context, config *config.Config, ready <-chan bool) <-chan 
 		done <- nil
 	}(ctx, done)
 
-	http.HandleFunc(config.Healthcheck.ApiPath, func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/health", func(w http.ResponseWriter, r *http.Request) {
 		var body []byte
 		var err error
 
