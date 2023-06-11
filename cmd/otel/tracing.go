@@ -24,7 +24,7 @@ func InitTracing(ctx context.Context, collector_endpoint string, collector_insec
 		return func() {}
 	}
 
-	if collector_insecure == true {
+	if collector_insecure {
 		security = otlptracegrpc.WithInsecure()
 	} else {
 		security = nil
@@ -33,7 +33,6 @@ func InitTracing(ctx context.Context, collector_endpoint string, collector_insec
 	client := otlptracegrpc.NewClient([]otlptracegrpc.Option{
 		otlptracegrpc.WithEndpoint(collector_endpoint),
 		security,
-		otlptracegrpc.WithInsecure(),
 	}...)
 	exporter, err := otlptrace.New(ctx, client)
 	if err != nil {
