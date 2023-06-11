@@ -18,8 +18,6 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	send_test_trace(ctx)
-
 	config_otel_endpoint := os.Getenv("OTEL_ENDPOINT")
 	config_otel_insecure := os.Getenv("OTEL_EXPORTER_INSECURE") == "true"
 	config_bot_token := os.Getenv("BOT_TOKEN")
@@ -46,11 +44,4 @@ func main() {
 	fmt.Println("cancelled context")
 
 	<-healthDone
-}
-
-func send_test_trace(ctx context.Context) {
-	_, span := otel.StartSpan(ctx, "test-span")
-	defer span.End()
-
-	fmt.Println("sending a test trace")
 }
