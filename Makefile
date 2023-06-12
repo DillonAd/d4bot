@@ -1,5 +1,5 @@
 # If you just run 'make' we default to the 'up' task.
-.DEFAULT_GOAL := run
+.DEFAULT_GOAL := up
 
 
 # For our Windows freinds.
@@ -18,7 +18,7 @@ build:
 	@docker-compose build
 	@docker tag d4bot dillonad/d4bot:${VERSION}
 
-.PHONY: run
+.PHONY: up
 run:
 	@docker-compose up -d --build
 
