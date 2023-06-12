@@ -19,7 +19,7 @@ build:
 	@docker tag d4bot dillonad/d4bot:${VERSION}
 
 .PHONY: up
-run:
+up:
 	@docker-compose up -d --build
 
 .PHONY: publish

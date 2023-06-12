@@ -18,17 +18,17 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	config_otel_endpoint := os.Getenv("OTEL_ENDPOINT")
-	config_otel_insecure := os.Getenv("OTEL_EXPORTER_INSECURE") == "true"
-	config_bot_token := os.Getenv("BOT_TOKEN")
+	configOtelEndpoint := os.Getenv("OTEL_ENDPOINT")
+	configOtelInsecure := os.Getenv("OTEL_EXPORTER_INSECURE") == "true"
+	configBotToken := os.Getenv("BOT_TOKEN")
 
-	shutdownTracing := otel.InitTracing(ctx, config_otel_endpoint, config_otel_insecure)
+	shutdownTracing := otel.InitTracing(ctx, configOtelEndpoint, configOtelInsecure)
 	defer shutdownTracing()
 
 	ready := make(chan bool)
 	healthDone := health.Init(ctx, ready)
 
-	bot, err := bot.New(ctx, config_bot_token)
+	bot, err := bot.New(ctx, configBotToken)
 	if err != nil {
 		panic(err)
 	}
