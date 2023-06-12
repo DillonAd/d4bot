@@ -17,23 +17,20 @@ import (
 )
 
 func InitTracing(ctx context.Context, collector_endpoint string, collector_insecure bool) func() {
-	var security otlptracegrpc.Option
-
 	if collector_endpoint == "" {
 		log.Println("no opentelemetry collector endpoint")
 		return func() {}
 	}
 
-	if collector_insecure {
-		security = otlptracegrpc.WithInsecure()
-	} else {
-		security = nil
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(collector_endpoint),
 	}
 
-	client := otlptracegrpc.NewClient([]otlptracegrpc.Option{
-		otlptracegrpc.WithEndpoint(collector_endpoint),
-		security,
-	}...)
+	if collector_insecure {
+		opts = append(opts, otlptracegrpc.WithInsecure())
+	}
+
+	client := otlptracegrpc.NewClient(opts...)
 	exporter, err := otlptrace.New(ctx, client)
 	if err != nil {
 		log.Printf("error creating trace exporter: %v", err)
