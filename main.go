@@ -15,9 +15,9 @@ import (
 )
 
 type Specification struct {
-	OtelEndpoint         string `split_words:"true"`
-	OtelExporterInsecure bool   `split_words:"true"`
-	BotToken             string `split_words:"true"`
+	OtelEndpoint string
+	OtelInsecure bool
+	DiscordToken string
 }
 
 func main() {
@@ -32,13 +32,13 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	shutdownTracing := otel.InitTracing(ctx, s.OtelEndpoint, s.OtelExporterInsecure)
+	shutdownTracing := otel.InitTracing(ctx, s.OtelEndpoint, s.OtelInsecure)
 	defer shutdownTracing()
 
 	ready := make(chan bool)
 	healthDone := health.Init(ctx, ready)
 
-	bot, err := bot.New(ctx, s.BotToken)
+	bot, err := bot.New(ctx, s.DiscordToken)
 	if err != nil {
 		panic(err)
 	}

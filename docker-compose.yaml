@@ -7,9 +7,9 @@ services:
       dockerfile: Dockerfile
     container_name: d4
     environment:
-      D4BOT_OTEL_ENDPOINT: jaeger-ui:4317
-      D4BOT_OTEL_EXPORTER_INSECURE: "true"
-      D4BOT_BOT_TOKEN: ${D4BOT_BOT_TOKEN}
+      D4BOT_OTELENDPOINT: jaeger-ui:4317
+      D4BOT_OTELINSECURE: "true"
+      D4BOT_DISCORDTOKEN: ${D4BOT_DISCORDTOKEN}
     networks:
       - d4bot
     depends_on:
