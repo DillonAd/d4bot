@@ -16,7 +16,7 @@ import (
 
 type Specification struct {
 	OtelEndpoint string
-	OtelInsecure bool
+	OtelInsecure bool `default:"false"`
 	DiscordToken string
 }
 
