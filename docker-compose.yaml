@@ -7,21 +7,4 @@ services:
       dockerfile: Dockerfile
     container_name: d4
     environment:
-      D4BOT_OTELENDPOINT: jaeger-ui:4317
-      D4BOT_OTELINSECURE: "true"
       D4BOT_DISCORDTOKEN: ${D4BOT_DISCORDTOKEN}
-    networks:
-      - d4bot
-    depends_on:
-      - jaeger-ui
-
-  jaeger-ui:
-    container_name: jaeger-ui
-    image: docker.io/jaegertracing/all-in-one
-    ports:
-      - "16686:16686"
-    networks:
-      - d4bot
-
-networks:
-  d4bot:
