@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/DillonAd/d4bot/cmd/bot/eventhandler"
+	"github.com/DillonAd/d4bot/cmd/config"
 	"github.com/bwmarrin/discordgo"
 )
 
@@ -13,8 +14,8 @@ type Bot struct {
 	session *discordgo.Session
 }
 
-func New(ctx context.Context, token string) (*Bot, error) {
-	session, err := discordgo.New(fmt.Sprintf("Bot %s", token))
+func New(ctx context.Context, config config.Config) (*Bot, error) {
+	session, err := discordgo.New(fmt.Sprintf("Bot %s", config.DiscordToken))
 	if err != nil {
 		return nil, err
 	}

@@ -8,37 +8,29 @@ import (
 	"syscall"
 
 	"github.com/DillonAd/d4bot/cmd/bot"
+	"github.com/DillonAd/d4bot/cmd/config"
 	"github.com/DillonAd/d4bot/cmd/health"
 	"github.com/DillonAd/d4bot/cmd/otel"
-
-	"github.com/kelseyhightower/envconfig"
 )
 
-type Specification struct {
-	OtelEndpoint string
-	OtelInsecure bool `default:"false"`
-	DiscordToken string
-}
-
 func main() {
-	var s Specification
-	err := envconfig.Process("d4bot", &s)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
-
 	shutdown := make(chan os.Signal, 1)
 	signal.Notify(shutdown, os.Interrupt, syscall.SIGTERM)
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	shutdownTracing := otel.InitTracing(ctx, s.OtelEndpoint, s.OtelInsecure)
+	config, err := config.Process()
+	if err != nil {
+		panic(err)
+	}
+
+	shutdownTracing := otel.InitTracing(ctx, config)
 	defer shutdownTracing()
 
 	ready := make(chan bool)
 	healthDone := health.Init(ctx, ready)
 
-	bot, err := bot.New(ctx, s.DiscordToken)
+	bot, err := bot.New(ctx, config)
 	if err != nil {
 		panic(err)
 	}
