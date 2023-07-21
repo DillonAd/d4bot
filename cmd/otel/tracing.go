@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 
+	"github.com/DillonAd/d4bot/cmd/config"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/baggage"
 	"go.opentelemetry.io/otel/codes"
@@ -16,16 +17,21 @@ import (
 	"go.opentelemetry.io/otel/trace"
 )
 
-func InitTracing(ctx context.Context, collectorEndpoint string) func() {
-	if collectorEndpoint == "" {
+func InitTracing(ctx context.Context, config config.Config) func() {
+	if config.OtelEndpoint == "" {
 		log.Println("no opentelemetry collector endpoint")
 		return func() {}
 	}
 
-	client := otlptracegrpc.NewClient([]otlptracegrpc.Option{
-		otlptracegrpc.WithEndpoint(collectorEndpoint),
-		otlptracegrpc.WithInsecure(),
-	}...)
+	opts := []otlptracegrpc.Option{
+		otlptracegrpc.WithEndpoint(config.OtelEndpoint),
+	}
+
+	if config.OtelInsecure {
+		opts = append(opts, otlptracegrpc.WithInsecure())
+	}
+
+	client := otlptracegrpc.NewClient(opts...)
 	exporter, err := otlptrace.New(ctx, client)
 	if err != nil {
 		log.Printf("error creating trace exporter: %v", err)

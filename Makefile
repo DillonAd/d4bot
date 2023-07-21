@@ -1,29 +1,36 @@
-NAME = d4bot
-VERSION := $(shell cat version)
+# If you just run 'make' we default to the 'up' task.
+.DEFAULT_GOAL := up
 
-.PHONY: up
-up:
-	docker-compose up -d
+
+# For our Windows freinds.
+ifeq ($(OS),Windows_NT)
+	SHELL := powershell.exe
+	.SHELLFLAGS := -NoProfile -Command
+	PWD := $(shell (Get-Item -Path .).FullName)
+else
+	PWD := $(shell pwd)
+endif
+
+VERSION := $(shell cat version)
 
 .PHONY: build
 build:
-	docker build -t ${NAME} .
-	docker tag ${NAME} dillonad/${NAME}:${VERSION}
-	docker tag ${NAME} dillonad/${NAME}:latest
+	@docker-compose build
+	@docker tag d4bot dillonad/d4bot:${VERSION}
 
-.PHONY: run
-run: build
-	docker run -it --rm -e BOT_TOKEN=${DISCORD_BOT_TOKEN} dillonad/${NAME}:latest
+.PHONY: up
+up:
+	@docker-compose up -d --build
 
 .PHONY: publish
 publish: build
-	docker push dillonad/${NAME}:${VERSION}
-	docker push dillonad/${NAME}:latest
+	@docker push dillonad/${NAME}:${VERSION}
+	@docker push dillonad/${NAME}:latest
 
 .PHONY: lint
 lint:
-	golangci-lint run
+	@docker run --rm -v ${PWD}:/app -w /app golangci/golangci-lint:latest golangci-lint run
 
 .PHONY: test
 test:
-	go test -bench=. -cover ./...
+	@docker run --rm -v ${PWD}:/app -w /app golang:1.20 go test -bench=. -cover ./...

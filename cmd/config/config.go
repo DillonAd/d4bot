@@ -3,38 +3,22 @@ package config
 import (
 	"fmt"
 
-	"github.com/spf13/viper"
+	"github.com/kelseyhightower/envconfig"
 )
 
 type Config struct {
-	Tracing     Tracing     `mapstructure:",squash"`
-	Healthcheck Healthcheck `mapstructure:",squash"`
-	Bot         Bot         `mapstructure:",squash"`
+	OtelEndpoint string
+	OtelInsecure bool `default:"false"`
+	DiscordToken string
 }
 
-type Tracing struct {
-	OtelEndpoint string `mapstructure:"OTEL_ENDPOINT"`
-}
+func New() (Config, error) {
+	var config Config
+	err := envconfig.Process("d4bot", &config)
 
-type Healthcheck struct {
-	ApiPath string `mapstructure:"HEALTH_PATH"`
-}
-
-type Bot struct {
-	Token string `mapstructure:"BOT_TOKEN"`
-}
-
-func Read() (*Config, error) {
-	viper.SetConfigFile("config.yaml")
-	viper.AutomaticEnv()
-
-	if err := viper.ReadInConfig(); err != nil {
-		return nil, fmt.Errorf("error reading config file: %v", err)
+	if err != nil {
+		return config, fmt.Errorf("error fetching env vars: %v", err)
 	}
 
-	config := &Config{}
-	if err := viper.Unmarshal(config); err != nil {
-		return nil, fmt.Errorf("error unmarshaling config: %v", err)
-	}
 	return config, nil
 }

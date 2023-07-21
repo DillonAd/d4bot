@@ -14,8 +14,8 @@ type Bot struct {
 	session *discordgo.Session
 }
 
-func New(ctx context.Context, config *config.Bot) (*Bot, error) {
-	session, err := discordgo.New(fmt.Sprintf("Bot %s", config.Token))
+func New(ctx context.Context, config config.Config) (*Bot, error) {
+	session, err := discordgo.New(fmt.Sprintf("Bot %s", config.DiscordToken))
 	if err != nil {
 		return nil, err
 	}

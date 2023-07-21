@@ -19,18 +19,18 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	config, err := config.Read()
+	config, err := config.New()
 	if err != nil {
 		panic(err)
 	}
 
-	shutdownTracing := otel.InitTracing(ctx, config.Tracing.OtelEndpoint)
+	shutdownTracing := otel.InitTracing(ctx, config)
 	defer shutdownTracing()
 
 	ready := make(chan bool)
-	healthDone := health.Init(ctx, config, ready)
+	healthDone := health.Init(ctx, ready)
 
-	bot, err := bot.New(ctx, &config.Bot)
+	bot, err := bot.New(ctx, config)
 	if err != nil {
 		panic(err)
 	}

@@ -2,35 +2,9 @@ version: "3.8"
 services:
   d4:
     image: dillonad/d4bot:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: d4
-    env_file:
-      - .env
-      - .env.local
-    networks:
-      - d4bot
-
-  otel-collector:
-    container_name: otel-collector
-    image: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-contrib:latest
-    volumes:
-      - ./otel-config.yaml:/etc/otelcol-contrib/config.yaml:Z
-    ports:
-      - "4317:4317"
-    networks:
-      - d4bot
-
-  jaeger-ui:
-    container_name: jaeger-ui
-    image: docker.io/jaegertracing/all-in-one
-    ports:
-      # Data port
-      - "14250:14250"
-      # UI Port
-      - "16686:16686"
-    networks:
-      - d4bot
-    depends_on:
-      - otel-collector
-
-networks:
-  d4bot:
+    environment:
+      D4BOT_DISCORDTOKEN: ${D4BOT_DISCORDTOKEN}
