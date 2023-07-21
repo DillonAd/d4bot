@@ -19,7 +19,7 @@ func main() {
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	config, err := config.NewConfig()
+	config, err := config.New()
 	if err != nil {
 		panic(err)
 	}

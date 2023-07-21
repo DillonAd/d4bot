@@ -12,7 +12,7 @@ type Config struct {
 	DiscordToken string
 }
 
-func NewConfig() (Config, error) {
+func New() (Config, error) {
 	var config Config
 	err := envconfig.Process("d4bot", &config)
 
