@@ -35,6 +35,7 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 		if err != nil {
 			otel.SpanError(span, err)
 		}
+		ReportFailure(spanCtx, s, m)
 		return
 	}
 
@@ -50,7 +51,10 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 	_, err = s.ChannelMessageSend(m.ChannelID, response)
 	if err != nil {
 		otel.SpanError(span, err)
+		ReportFailure(spanCtx, s, m)
 	}
+
+	ReportSuccess(spanCtx, s, m)
 }
 
 func getDiceData(input string) (int, int, error) {
