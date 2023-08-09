@@ -7,4 +7,5 @@ services:
       dockerfile: Dockerfile
     container_name: d4
     environment:
-      D4BOT_DISCORDTOKEN: ${D4BOT_DISCORDTOKEN}
+      D4BOT_DISCORDTOKEN: ${BOT_TOKEN}
+      D4BOT_OTELENDPOINT: ${OTEL_ENDPOINT}
