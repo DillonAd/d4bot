@@ -57,7 +57,7 @@ func getDiceData(input string) (int, int, error) {
 	r, _ := regexp.Compile(`\d+d\d+`)
 	match := r.FindString(input)
 	if match == "" {
-		return -1, -1, fmt.Errorf("")
+		return -1, -1, fmt.Errorf("invalid input: %s", input)
 	}
 	commandParts := strings.Split(match, "d")
 	dieCount, _ := strconv.Atoi(commandParts[0])
