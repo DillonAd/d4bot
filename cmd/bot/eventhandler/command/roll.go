@@ -42,9 +42,16 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 	total := 0
 	results := make([]string, dieCount)
 	for i := 0; i < dieCount; i++ {
-		result := rand.Intn(diceSides) + 1
+		result := 0
+		if diceSides > 0 {
+			result = rand.Intn(diceSides) + 1
+		}
 		results[i] = strconv.Itoa(result)
 		total += result
+	}
+
+	if dieCount == 0 {
+		results = append(results, "0")
 	}
 
 	response := fmt.Sprintf("%s - (`%s`)=`%d`", m.Author.Username, strings.Join(results, "`+`"), total)
