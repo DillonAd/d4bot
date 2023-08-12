@@ -54,7 +54,7 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 		results = append(results, "0")
 	}
 
-	response := fmt.Sprintf("%s - (`%s`)=`%d`", m.Author.Username, strings.Join(results, "`+`"), total)
+	response := fmt.Sprintf("%s (`%s`)=`%d`", m.Author.Mention(), strings.Join(results, "`+`"), total)
 	_, err = s.ChannelMessageSend(m.ChannelID, response)
 	if err != nil {
 		otel.SpanError(span, err)
