@@ -42,16 +42,9 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 	total := 0
 	results := make([]string, dieCount)
 	for i := 0; i < dieCount; i++ {
-		result := 0
-		if diceSides > 0 {
-			result = rand.Intn(diceSides) + 1
-		}
+		result := rand.Intn(diceSides) + 1
 		results[i] = strconv.Itoa(result)
 		total += result
-	}
-
-	if dieCount == 0 {
-		results = append(results, "0")
 	}
 
 	response := fmt.Sprintf("%s (`%s`)=`%d`", m.Author.Mention(), strings.Join(results, "`+`"), total)
@@ -65,7 +58,7 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func getDiceData(input string) (int, int, error) {
-	r, _ := regexp.Compile(`\d+d\d+`)
+	r, _ := regexp.Compile(`[1-9][0-9]*d[1-9][0-9]*`)
 	match := r.FindString(input)
 	if match == "" {
 		return -1, -1, fmt.Errorf("invalid input: %s", input)

@@ -53,6 +53,20 @@ func TestGetDiceData(t *testing.T) {
 			ExpectedDieCount:  -1,
 			ExpectedDiceSides: -1,
 		},
+		{
+			Name:              "invalid - zero dice",
+			CommandInput:      "0d8",
+			IsError:           true,
+			ExpectedDieCount:  -1,
+			ExpectedDiceSides: -1,
+		},
+		{
+			Name:              "invalid - zero dice sides",
+			CommandInput:      "4d0",
+			IsError:           true,
+			ExpectedDieCount:  -1,
+			ExpectedDiceSides: -1,
+		},
 	}
 
 	for _, c := range cases {
