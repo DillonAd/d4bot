@@ -1,7 +1,11 @@
 package eventhandler
 
-func EventHandlers() map[string]interface{} {
+import (
+	"github.com/DillonAd/d4bot/cmd/bot/eventhandler/command"
+)
+
+func Handlers() map[string]interface{} {
 	return map[string]interface{}{
-		"shoresy": shoresy,
+		command.RollCommandName: command.Roll,
 	}
 }

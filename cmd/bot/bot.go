@@ -23,7 +23,7 @@ func New(ctx context.Context, config config.Config) (*Bot, error) {
 		session: session,
 	}
 
-	bot.registerEventHandlers()
+	bot.registerEvents()
 
 	return bot, nil
 }
@@ -32,12 +32,13 @@ func (b *Bot) Start() {
 	err := b.session.Open()
 	if err != nil {
 		log.Printf("error starting bot: %v", err)
+		return
 	}
 }
 
-func (b *Bot) registerEventHandlers() {
+func (b *Bot) registerEvents() {
 	b.session.Identify.Intents = discordgo.IntentMessageContent
-	for name, handler := range eventhandler.EventHandlers() {
+	for name, handler := range eventhandler.Handlers() {
 		fmt.Printf("registering event handler: %s\n", name)
 		_ = b.session.AddHandler(handler)
 	}

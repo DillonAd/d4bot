@@ -5,7 +5,9 @@ import (
 	"log"
 
 	"github.com/DillonAd/d4bot/cmd/config"
+	"github.com/bwmarrin/discordgo"
 	"go.opentelemetry.io/otel"
+	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/baggage"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
@@ -76,4 +78,11 @@ func StartSpan(ctx context.Context, name string) (context.Context, trace.Span) {
 func SpanError(span trace.Span, err error) {
 	span.RecordError(err)
 	span.SetStatus(codes.Error, err.Error())
+}
+
+func AddHandlerAttributes(span trace.Span, m *discordgo.MessageCreate) {
+	span.SetAttributes(
+		attribute.String("username", m.Author.Username),
+		attribute.String("channelID", m.ChannelID),
+	)
 }
