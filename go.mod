@@ -1,6 +1,6 @@
 module github.com/DillonAd/d4bot
 
-go 1.20
+go 1.26
 
 require (
 	github.com/bwmarrin/discordgo v0.27.1
