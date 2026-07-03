@@ -12,7 +12,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-var RollCommandName string = "roll"
+const CommandNameRoll string = "roll"
 
 func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 	spanCtx, span := otel.StartSpan(context.Background(), "command/roll")
@@ -24,7 +24,7 @@ func Roll(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	if !IsCommand(spanCtx, m, RollCommandName) {
+	if !IsCommand(spanCtx, m, CommandNameRoll) {
 		return
 	}
 
