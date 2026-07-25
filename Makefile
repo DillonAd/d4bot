@@ -2,7 +2,7 @@
 .DEFAULT_GOAL := up
 
 
-# For our Windows freinds.
+# For our Windows friends.
 ifeq ($(OS),Windows_NT)
 	SHELL := powershell.exe
 	.SHELLFLAGS := -NoProfile -Command
@@ -20,7 +20,7 @@ build:
 
 .PHONY: up
 up:
-	@docker-compose up -d --build
+	@docker-compose up --watch
 
 .PHONY: publish
 publish: build

@@ -1,10 +1,14 @@
-version: "3.8"
+version: '3.8'
 services:
   d4:
     image: dillonad/d4bot:latest
     build:
       context: .
       dockerfile: Dockerfile
+    develop:
+      watch:
+        - action: rebuild
+          path: .
     container_name: d4
     environment:
       D4BOT_DISCORDTOKEN: ${BOT_TOKEN}
